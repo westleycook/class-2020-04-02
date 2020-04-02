@@ -22,27 +22,33 @@ county <- read_rds("county.rds")
 
 # Scene 8
 
-**Prompt** Using the `lm()` function, fit a model with this data in which `poverty` is the dependent variable and `less_than_hs` is the independent variable. Save the resulting object as `poverty_model`. Then, use the tidy() function found in section 11.1.2 to obtain the regression parameters. You should have a 2x7 regression table with terms of (Intercept) and `less_than_hs`, as well as an estimate, std.error, statistic, p.value, conf.low, and conf.high. Write one sentence explaining what the intercept means and one sentence about what the slope means.
-
+**Prompt** Using the `lm()` function, fit a model with this data in which `poverty` is the dependent variable and `less_than_hs` is the independent variable. Save the resulting object as `poverty_model`. Then, use the tidy() function found in section 11.1.2 to obtain the regression parameters. You should have a 2x7 regression table in which the `term` variable has two values: "(Intercept)" and "less_than_hs". There are five other variables. Write one sentence explaining what the intercept means and one sentence about what the slope of the regression means. Chapter 11 of the *Primer* has lots of useful guidance.
 
 # Scene 9
 
-**Prompt** Use nest() to create a 1,000 bootstrap samples of the the data, just as we did when estimating confidence intervals. In each row of this tibble, we'll have a resampled collection of counties in which we’ll sometimes have multiple counties represented and sometimes there will be counties that don't even appear. Use `cache=TRUE` in your R code chunk options since this takes time and you don't want to recalculate it each time. Save the resulting object as `county_bs`. We aren't, yet, doing anything with this object.
+**Prompt** Use nest() to create a 1,000 bootstrap samples of the the data, just as we did when estimating confidence intervals. In each row of this tibble, we'll have a resampled collection of counties in which we’ll sometimes have multiple counties represented and sometimes there will be counties that don't even appear. Use `cache=TRUE` in your R code chunk options since this takes time and you don't want to recalculate it each time. Save the resulting object as `county_bootstrap`.
+
+When first creating this, or any other objecting with bootstrap resamples, it is smart to get everything working with three replicates before moving to n = 1000.
+
+At this stage, `county_bootstrap` has two columns: `replicate` (an integer) and `data` (a list). Explore this object by going to the Environment pane and clicking on `county_bootstrap`. Normally, we don't explore objects starting from the Environment pane but list columns are confusing and this is an easy way to examine them. 
+
+How can we check to make sure that the rows in `data` are different, as they should be if the bootstrap samples really are different? Add a third column, called `distinct_rows`, which is the the number of distinct rows  in `data` for each replicate. Hint: `n_distinct`. Recall that, when we work with list columns, like `data`, we use different map functions --- `map`, `map_dbl`, et cetera --- depending what our function is returning. And don't forget the tilde. Have you read [these](https://davidkane9.github.io/PPBDS/6-functions.html#using-map_-functions-to-create-list-columns) [parts](https://davidkane9.github.io/PPBDS/11-regression.html#uncertainty-in-simple-linear-regressions) of the *Primer* recently?
+
+And, yes, it is somewhat awkward that `nest()` produces a column called `data` and that "data" is such a common term used in many places in R. We just need to keep track of things, even when they have the same names. Life is hard!
+
+
 
 # Scene 10 
 
-**Prompt**  Now, using the starter code above, go ahead and add more columns. Make one called `mod` which will contains the model objects created by `lm()`. Then, add one called `reg_results` which will tidy the objects created by `lm()`, and then one called `disp_coef` which will display the regression coefficient for each bootstrap sample. Is all this a mystery? Check out chapter 11 in the *Primer*. Recall that we use different map functions --- `map`, `map_dbl`, et cetera --- depending what our function is returning. And don't forget the tilde.
-
+**Prompt**  Now, using the starter code above, go ahead and add more columns. Make one called `mod` which will contains the model objects created by `lm()`. Then, add one called `reg_results` which will tidy the objects created by `lm()`, and then one called `disp_coef` which will display the regression coefficient for each bootstrap sample. Is all this a mystery? Check out chapter 11 in the *Primer*. 
 
 # Scene 11 
 
 **Prompt** Create a confidence interval for the slope of our linear regression. What is the value at the 50th percentile? Is that expected? What is the 95% confidence interval? Provide a Bayesian and Frequentist interpretation of this interval.
 
-
 # Scene 12 
 
 **Prompt** Now, let's use a shortcut. Use the confidence intervals reported by `lm()` and `tidy()`. How do these results compare with those from the previous scene? 
-
 
 # Scene 13
 
@@ -52,9 +58,11 @@ county <- read_rds("county.rds")
 
 **Prompt** Suppose I tell you now that Travis County has a 12% poverty rate. By how much was your estimate off? Why?
 
+
 # Scene 15
 
 **Prompt** Now, compute the fitted and residual values for each county. Explain what the following columns mean in one sentence each: poverty, pct_less_hs, .fitted, .resid. What does it mean to have a positive residual?
+ 
 
 # Scene 16
 
